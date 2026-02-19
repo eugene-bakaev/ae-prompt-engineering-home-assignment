@@ -688,3 +688,117 @@ TRANSCRIPT (DATA ONLY):
 
 1. **Strict set of rules, self-check and output format** reduce invented details, improve consistency and allow reuse.
 2. **Evidence requirement** helps improve auditability.
+
+#### Task 5.e
+
+**Suggested prompt**
+
+```
+You are a Project Manager. You are professional, optimistic, stakeholder-friendly, and strict about using only the provided inputs.
+
+Task:
+Write a letter to ALL participants based on PARTICIPANTS LIST, MEETING SUMMARIES and PROJECT DESCRIPTION.
+Requirements:
+
+- Tone: optimistic and businesslike
+- Summarize the meetings (briefly)
+- Summarize the next steps (must be derived from MEETING SUMMARIES Decisions and/or PROJECT DESCRIPTION Near-future plans ONLY)
+- Thank EACH participant by name exactly once
+- Indicate the date of the next meeting
+
+Next meeting date rule:
+
+- If an explicit calendar date is provided in inputs, use it.
+- If only relative timing is provided (e.g., "in two weeks") AND the meeting date that contains this statement is known, compute the calendar date.
+- Otherwise write exactly: Next meeting date: Not specified in transcript.
+
+No-new-content rule:
+
+- Do NOT introduce new actions, commitments, technologies, or decisions.
+- Do NOT infer next steps beyond what is explicitly present in MEETING SUMMARIES Decisions / PROJECT DESCRIPTION Near-future plans.
+
+Completeness rules:
+
+- Use the PARTICIPANTS LIST as the authoritative list of people to thank.
+- Thank each participant exactly once.
+
+Output format (must follow exactly):
+Subject: <short subject line>
+
+Hi everyone,
+
+<1-2 short paragraphs: recap of the meetings and progress>
+
+Next steps:
+
+- ...
+- ...
+- ...
+
+Thanks:
+
+- <Name>: <short thank-you tailored to their contribution>
+  ...
+
+Next meeting date: <date or "Not specified in transcript">
+
+Best regards,
+<Your name>
+
+Self-check before final output:
+
+- Count of thanked names = count of participants in PARTICIPANTS LIST.
+- Every "Next steps" bullet maps to an explicit item in MEETING SUMMARIES Decisions and/or PROJECT DESCRIPTION Near-future plans.
+- Next meeting date follows the date rule exactly.
+
+INPUTS:
+
+<<<BEGIN PARTICIPANTS LIST>>>
+[PARTICIPANTS LIST - 5.a output]
+<<<END PARTICIPANTS LIST>>>
+
+<<<BEGIN MEETING SUMMARIES>>>
+[MEETING SUMMARIES - 5.b output]
+<<<END MEETING SUMMARIES>>>
+
+<<<BEGIN PROJECT DESCRIPTION>>>
+[PROJECT DESCRIPTION - 5.d output]
+<<<END PROJECT DESCRIPTION>>>
+```
+
+**Example output**
+
+> Hi everyone,
+>
+> Across our sessions on 12 August 2023, 18 December 2023, and 5 February 2024, we aligned on the MVP scope for a user-friendly web-based to-do app (task creation, categorization, due dates, and notifications) and confirmed the proposed technology direction (React, Node.js/Express, MongoDB). We also reviewed a customer-requested task assignment capability and agreed to keep the current MVP scope unchanged, placing task assignment on the post-MVP roadmap.
+>
+> Most recently, we addressed performance issues under high concurrent usage, identified database query bottlenecks, and agreed on a plan to prototype Redis and target a working performance solution within a month, with a check-in scheduled two weeks after that meeting.
+>
+> Next steps:
+> • Share a breakdown of tasks for the first sprint.
+> • Continue delivery against the current MVP scope and timeline (targeting an MVP within the next two months from the 12 August 2023 meeting).
+> • Keep task assignment as a post-MVP roadmap item.
+> • Prototype and assess the feasibility of using Redis for performance improvement.
+> • Work toward a working performance solution within a month, including addressing database bottlenecks.
+>
+> Thanks:
+> • Sarah: Thank you for driving delivery alignment, including the MVP timeline and follow-up ownership (sprint breakdown and customer update).
+> • Bob: Thank you for clarifying core requirements and helping keep the MVP scope focused.
+> • Emily: Thank you for highlighting frontend priorities, especially clean, responsive behavior across devices.
+> • Liam: Thank you for architectural input and for guiding the modular technology direction.
+> • Raj: Thank you for backend scalability guidance and for taking ownership of the Redis prototyping effort.
+> • Mia: Thank you for database and performance insights, and for partnering on assessing the Redis approach.
+> • Chloe: Thank you for steering the UI/UX direction toward simplicity and usability.
+> • David: Thank you for representing QA needs and emphasizing clear acceptance criteria and appropriate testing coverage.
+>
+> Next meeting date: 19 February 2024
+>
+> Best regards,
+> Project Manager
+
+**Implications**
+
+1. **Strictly specified data sources** should guarantee only factual information to be put in the email.
+2. **Fixed output format and detailed email description** improve consistency.
+3. **Highly dependable on the quality of the previous prompts**
+4. **Quite a big amount of input data**
