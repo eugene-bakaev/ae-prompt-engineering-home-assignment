@@ -802,3 +802,184 @@ INPUTS:
 2. **Fixed output format and detailed email description** improve consistency.
 3. **Highly dependable on the quality of the previous prompts**
 4. **Quite a big amount of input data**
+
+## Task 6
+
+### Task 6 description
+
+Based on the Wikipedia article about Go (https://en.wikipedia.org/wiki/Go_(programming_language)), create an English-language quiz about the Go language. The quiz should have a limited number of questions (you have to specify it yourself): multiple answer options (one correct), multiple answer options (several correct), true/false.
+
+### Task 6 Solution
+
+**Suggested prompt**
+
+```
+Role: You are a University Lecturer in Computer Science. You are precise, fair, and focused on creating clear assessments. You avoid speculation and you verify facts against the provided reference.
+
+Task:
+Using ONLY the attached PDF (Wikipedia article about Go), create an English-language quiz about the Go programming language.
+
+Quiz design (you must follow these exact settings):
+- Total questions: 15
+- Question types:
+  - 7 questions: Multiple choice (single correct)
+  - 5 questions: Multiple choice (multiple correct; 2–3 correct options)
+  - 3 questions: True/False
+- Answer options:
+  - Single-correct MCQ: 4 options labeled A–D
+  - Multi-correct MCQ: 5 options labeled A–E
+  - True/False: use "True" and "False"
+- Correctness notation:
+  - Single-correct: "Correct: B"
+  - Multi-correct: "Correct: [A, C, E]" (letters sorted)
+  - True/False: "Correct: True"
+
+Reference-only rules (strict):
+- Use ONLY facts that are explicitly supported by the attached PDF.
+- Do NOT use outside knowledge about Go.
+- If a question cannot be supported by the PDF, do not include it.
+
+Quality check (must do before final output):
+For EACH question, verify:
+1) The correct answer(s) are explicitly supported by the PDF.
+2) Incorrect options are not also true according to the PDF.
+3) Wording is unambiguous and not trick-based.
+4) Multi-correct questions have exactly 2–3 correct options.
+5) No near-duplicates; questions cover varied parts of the article (e.g., history/origins, goals, syntax/features, concurrency, tooling, implementation/runtime, ecosystem).
+
+Revision rule:
+- If 3 or more questions fail the quality check, regenerate ONLY the failed questions and re-check them.
+- Repeat until all questions pass.
+
+Output format (final answer must follow exactly; output ONLY the quiz):
+Q1 (Single correct): <question>
+A) ...
+B) ...
+C) ...
+D) ...
+Correct: <letter>
+
+Q2 (Multiple correct): <question>
+A) ...
+B) ...
+C) ...
+D) ...
+E) ...
+Correct: [<letters>]
+
+Q3 (True/False): <statement>
+Correct: True/False
+
+...
+
+Important:
+- Do NOT include explanations.
+- Do NOT include the quality-check notes in the final output.
+- If the PDF content is not accessible, output exactly: Missing reference document.
+- Do not refer to the article in the questions text.
+```
+
+**Example output**
+
+> Q1 (Single correct): When did Go first appear?
+> A) November 10, 2009
+> B) March 2012
+> C) August 2018
+> D) February 10, 2026
+> Correct: A
+>
+> Q2 (Multiple correct): Which characteristics did Go’s designers want to keep from other languages in use at Google?
+> A) Static typing and run-time efficiency
+> B) Readability and usability
+> C) Dynamic typing and interpreted execution
+> D) Manual memory management without garbage collection
+> E) A required class hierarchy with inheritance
+> Correct: [A, B]
+>
+> Q3 (True/False): Go is often referred to as “Golang” to avoid ambiguity, but its proper name is “Go”.
+> Correct: True
+>
+> Q4 (Single correct): Where was Go designed?
+> A) Google
+> B) Microsoft
+> C) Apple
+> D) IBM
+> Correct: A
+>
+> Q5 (Multiple correct): Which of the following are the two major implementations of Go?
+> A) The original, self-hosting compiler toolchain initially developed inside Google
+> B) A C++ frontend called gofrontend (originally a GCC frontend)
+> C) GopherJS (a source-to-source compiler that transpiles Go to JavaScript)
+> D) Go Mono (a font released for the Go project)
+> E) Docker (a containerization platform)
+> Correct: [A, B]
+>
+> Q6 (Single correct): What is the filename extension for Go source files?
+> A) .go
+> B) .golang
+> C) .g
+> D) .mod
+> Correct: A
+>
+> Q7 (Multiple correct): Which of the following are listed as built-in concurrency primitives in Go?
+> A) Goroutines
+> B) Channels
+> C) The select statement
+> D) Virtual inheritance
+> E) Pointer arithmetic
+> Correct: [A, B, C]
+>
+> Q8 (True/False): The Go language specification specifies how goroutines should be implemented.
+> Correct: False
+>
+> Q9 (Single correct): Which keyword does Go use to create enumerated constants?
+> A) iota
+> B) enum
+> C) typedef
+> D) consteval
+> Correct: A
+>
+> Q10 (Multiple correct): Which features are explicitly listed as deliberately omitted in Go?
+> A) Assertions
+> B) Inheritance
+> C) Pointer arithmetic
+> D) Garbage collection
+> E) Channels
+> Correct: [A, B, C]
+>
+> Q11 (Single correct): How many reserved words (keywords) does Go contain?
+> A) 20
+> B) 25
+> C) 30
+> D) 35
+> Correct: B
+>
+> Q12 (Multiple correct): Which commands are tools included in the main Go distribution for building/testing/analyzing code?
+> A) go build
+> B) go test
+> C) go vet
+> D) gopls
+> E) goimports
+> Correct: [A, B, C]
+>
+> Q13 (True/False): The linker in the gc toolchain creates statically linked binaries by default.
+> Correct: True
+>
+> Q14 (Single correct): When was Go version 1.0 released?
+> A) March 2012
+> B) November 2009
+> C) March 2010
+> D) March 2022
+> Correct: A
+>
+> Q15 (Single correct): Which of the following is a popular application written in Go?
+> A) Kubernetes
+> B) Django
+> C) TensorFlow
+> D) jQuery
+> Correct: A
+
+**Implications**
+
+1. **Direct instructions to use a particular data source** should eliminate factual drift and wrong answers.
+2. **Built-in quality loop** improves realiability without user intervention, but results in a higher token cost.
